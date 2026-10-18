@@ -2,15 +2,15 @@
 
 工作流文件：[`.github/workflows/timezone-schedule.yml`](.github/workflows/timezone-schedule.yml)
 
-每天按 **Australia/Adelaide 当地时间**触发三次：
+每天按各目标城市的**当地时间**触发三次。以下是 **2026-10-18 Adelaide 时间**的换算：
 
-| Adelaide 计划时间 | 日志中的城市时区 |
-| --- | --- |
-| 11:30 | Sydney (`Australia/Sydney`) |
-| 11:35 | Tokyo (`Asia/Tokyo`) |
-| 11:40 | New York (`America/New_York`) |
+| Adelaide 时间 | `schedule.timezone` | 目标城市计划时间 |
+| --- | --- | --- |
+| 11:30 | `Australia/Sydney` | 当天 12:00 |
+| 11:35 | `Asia/Tokyo` | 当天 10:05 |
+| 11:40 | `America/New_York` | **前一天** 21:10 |
 
-工作流使用 GitHub Actions `schedule.timezone`，因此 Adelaide 的夏令时切换会自动处理。每次运行会打印计划时间、实际开始时的 Adelaide 时间和对应城市时间。三个城市自身的夏令时也由系统时区数据库处理。
+每次运行会打印目标城市计划时间、实际开始时的 Adelaide 时间和目标城市时间。`schedule.timezone` 分别设置为目标城市时区，按照这些城市的夏令时规则触发。Adelaide、东京、纽约的夏令时规则不同，所以东京和纽约的运行时间**不会全年固定在 Adelaide 的 11:35 和 11:40**。纽约 2026-10-18 Adelaide 11:40 所对应的当地 10 月 17 日 21:10 已经过了；推送后首次纽约计划运行将对应 Adelaide 次日 11:40。
 
 将文件放在 GitHub 仓库的**默认分支**后，在 **Actions → Timezone schedule test** 查看运行记录和日志。也可以点击 **Run workflow**，选择 `city` 立即手动验证输出。
 

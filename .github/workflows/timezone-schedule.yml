@@ -2,12 +2,12 @@ name: Timezone schedule test
 
 on:
   schedule:
-    - cron: '30 11 * * *'
-      timezone: Australia/Adelaide
-    - cron: '35 11 * * *'
-      timezone: Australia/Adelaide
-    - cron: '40 11 * * *'
-      timezone: Australia/Adelaide
+    - cron: '0 12 * * *'
+      timezone: Australia/Sydney
+    - cron: '5 10 * * *'
+      timezone: Asia/Tokyo
+    - cron: '10 21 * * *'
+      timezone: America/New_York
   workflow_dispatch:
     inputs:
       city:
@@ -25,23 +25,23 @@ jobs:
   print-time:
     runs-on: ubuntu-latest
     steps:
-      - name: Sydney time (11:30 Adelaide)
-        if: github.event.schedule == '30 11 * * *' || inputs.city == 'sydney'
+      - name: Sydney time (12:00 Sydney)
+        if: github.event.schedule == '0 12 * * *' || inputs.city == 'sydney'
         run: |
-          echo "Scheduled: 11:30 Australia/Adelaide"
+          echo "Scheduled: 12:00 Australia/Sydney"
           echo "Actual Adelaide time: $(TZ=Australia/Adelaide date '+%Y-%m-%d %H:%M:%S %Z %z')"
           echo "Sydney time: $(TZ=Australia/Sydney date '+%Y-%m-%d %H:%M:%S %Z %z')"
 
-      - name: Tokyo time (11:35 Adelaide)
-        if: github.event.schedule == '35 11 * * *' || inputs.city == 'tokyo'
+      - name: Tokyo time (10:05 Tokyo)
+        if: github.event.schedule == '5 10 * * *' || inputs.city == 'tokyo'
         run: |
-          echo "Scheduled: 11:35 Australia/Adelaide"
+          echo "Scheduled: 10:05 Asia/Tokyo"
           echo "Actual Adelaide time: $(TZ=Australia/Adelaide date '+%Y-%m-%d %H:%M:%S %Z %z')"
           echo "Tokyo time: $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S %Z %z')"
 
-      - name: New York time (11:40 Adelaide)
-        if: github.event.schedule == '40 11 * * *' || inputs.city == 'new_york'
+      - name: New York time (21:10 New York)
+        if: github.event.schedule == '10 21 * * *' || inputs.city == 'new_york'
         run: |
-          echo "Scheduled: 11:40 Australia/Adelaide"
+          echo "Scheduled: 21:10 America/New_York"
           echo "Actual Adelaide time: $(TZ=Australia/Adelaide date '+%Y-%m-%d %H:%M:%S %Z %z')"
           echo "New York time: $(TZ=America/New_York date '+%Y-%m-%d %H:%M:%S %Z %z')"
