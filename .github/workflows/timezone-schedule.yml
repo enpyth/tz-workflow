@@ -2,11 +2,11 @@ name: Timezone schedule test
 
 on:
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '30 14 * * *'
       timezone: Australia/Sydney
-    - cron: '5 10 * * *'
+    - cron: '35 12 * * *'
       timezone: Asia/Tokyo
-    - cron: '10 21 * * *'
+    - cron: '40 23 * * *'
       timezone: America/New_York
   workflow_dispatch:
     inputs:
@@ -25,23 +25,32 @@ jobs:
   print-time:
     runs-on: ubuntu-latest
     steps:
-      - name: Sydney time (12:00 Sydney)
-        if: github.event.schedule == '0 12 * * *' || inputs.city == 'sydney'
+      - name: Print trigger details
+        env:
+          TRIGGER_EVENT: ${{ github.event_name }}
+          TRIGGER_CRON: ${{ github.event.schedule }}
         run: |
-          echo "Scheduled: 12:00 Australia/Sydney"
+          echo "Event: $TRIGGER_EVENT"
+          echo "Cron: $TRIGGER_CRON"
+          echo "Run ID: $GITHUB_RUN_ID"
+
+      - name: Sydney time (14:30 Sydney)
+        if: github.event.schedule == '30 14 * * *' || inputs.city == 'sydney'
+        run: |
+          echo "Scheduled: 14:30 Australia/Sydney"
           echo "Actual Adelaide time: $(TZ=Australia/Adelaide date '+%Y-%m-%d %H:%M:%S %Z %z')"
           echo "Sydney time: $(TZ=Australia/Sydney date '+%Y-%m-%d %H:%M:%S %Z %z')"
 
-      - name: Tokyo time (10:05 Tokyo)
-        if: github.event.schedule == '5 10 * * *' || inputs.city == 'tokyo'
+      - name: Tokyo time (12:35 Tokyo)
+        if: github.event.schedule == '35 12 * * *' || inputs.city == 'tokyo'
         run: |
-          echo "Scheduled: 10:05 Asia/Tokyo"
+          echo "Scheduled: 12:35 Asia/Tokyo"
           echo "Actual Adelaide time: $(TZ=Australia/Adelaide date '+%Y-%m-%d %H:%M:%S %Z %z')"
           echo "Tokyo time: $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S %Z %z')"
 
-      - name: New York time (21:10 New York)
-        if: github.event.schedule == '10 21 * * *' || inputs.city == 'new_york'
+      - name: New York time (23:40 New York)
+        if: github.event.schedule == '40 23 * * *' || inputs.city == 'new_york'
         run: |
-          echo "Scheduled: 21:10 America/New_York"
+          echo "Scheduled: 23:40 America/New_York"
           echo "Actual Adelaide time: $(TZ=Australia/Adelaide date '+%Y-%m-%d %H:%M:%S %Z %z')"
           echo "New York time: $(TZ=America/New_York date '+%Y-%m-%d %H:%M:%S %Z %z')"
